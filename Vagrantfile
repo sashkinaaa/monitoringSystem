@@ -8,7 +8,7 @@ vb.cpus = 1
 end
 
 # InfluxDB API token and IP addresses
-InfluxDB_token = vAARi40FN-6YvLl7bxXqRp3vjxFM24UQ8-j6N4B256qqMLOlbe1A2o_aIq_O1yHTlInXhgf8H33iHytD8hkqxA==
+InfluxDB_token = yourToken
 server1_ip = 192.168.56.11
 server2_ip = 192.168.56.12
 server3_ip = 192.168.56.13

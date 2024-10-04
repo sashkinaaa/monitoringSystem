@@ -1,0 +1,41 @@
+//Flux Query for CPU usage
+from(bucket: "COLLECTION")
+|> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+|> filter(fn: (r) => r["_measurement"] == "cpu")
+|> filter(fn: (r) => r["host"] == "${host}")
+|> filter(fn: (r) => r["cpu"] == "cpu-total")
+|> filter(fn: (r) => r["_field"] == "usage_user" or r["_field"] == "usage_system" or r["_field"] == "usage_idle")
+|> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+|> yield(name: "mean")
+
+//Flux Query for inodes used
+from(bucket: "COLLECTION")
+|> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+|> filter(fn: (r) => r["host"] == "${host}")
+|> filter(fn: (r) => r["_measurement"] == "disk")
+|> filter(fn: (r) => r["_field"] == "inodes_used")
+|> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+|> yield(name: "mean")
+|> distinct()
+
+//Flux Query for disk usage
+from(bucket: "COLLECTION")
+|> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+|> filter(fn: (r) => r["host"] == "${host}")
+|> filter(fn: (r) => r["_measurement"] == "disk")
+|> filter(fn: (r) => r["_field"] == "used")
+|> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)
+|> yield(name: "last")
+
+
+//Flux Query for network bandwidth
+from(bucket: "COLLECTION")
+|> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+|> filter(fn: (r) => r["host"] == "${host}")
+|> filter(fn: (r) => r["_measurement"] == "net")
+|> filter(fn: (r) => r["_field"] == "speed")
+|> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+|> yield(name: "mean")
+  
+
+
